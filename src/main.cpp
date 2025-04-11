@@ -16,6 +16,8 @@ int main() {
         root->insert(p);
     }
 
+    std::cout << "Test" << std::endl;
+
     // Clean up
     delete root;
 
