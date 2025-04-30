@@ -5,4 +5,5 @@ struct Particle {
     Vec2 velocity;
     double mass;
     double radius;
+    int id;
 };
