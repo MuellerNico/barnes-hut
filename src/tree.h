@@ -1,7 +1,7 @@
 #include "particle.h"
 #include <vector>
 
-#define MAX_PARTICLES 4
+#define MAX_PARTICLES 1
 
 struct Node {
     Vec2 position;
@@ -30,9 +30,6 @@ struct Node {
 Node::~Node() {
     for (Node* child : children) {
         delete child;
-    }
-    for (Particle* particle : particles) {
-        delete particle;
     }
     children.clear();
     particles.clear();
