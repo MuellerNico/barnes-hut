@@ -3,7 +3,7 @@
 echo "Compiling..."
 make clean
 make 
-echo "Running the simulation..."
+echo "Running..."
 ./a.out
 echo "Plotting..."
 python3 plot.py

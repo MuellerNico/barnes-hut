@@ -1,4 +1,3 @@
-# create an animation of 2D N-body simulation. Each frame/snapshot is a csv file containing the system state
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation

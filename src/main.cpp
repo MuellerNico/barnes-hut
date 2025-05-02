@@ -1,45 +1,15 @@
 #include "tree.h"
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <queue>
+#include "ioHandler.h"
 
-constexpr int numParticles = 100; 
+// TODOs
+// - correct scaling of masses, G etc
+// - validate model 
+// - benchmark tree vs naive
+
+constexpr int numParticles = 50; 
 constexpr double theta = 0.5; // threshold. using center of mass approximation if s/d < theta. If zero, degenerates to brute force
 constexpr double dt = 0.01; // time step
-constexpr double G = 1.0; // gravitational constant ToDo: correctly scale masses and distances
-
-void write_snapshot(const std::vector<Particle>& particles, int f) {
-    std::ofstream file("out/frame_" + std::to_string(f) + ".csv");
-    file << "t,particle_id,pos_x,pos_y,vel_x,vel_y,mass,radius" << std::endl;
-    for (const Particle& p : particles) {
-        file << f << "," << p.id << "," << p.position.x << "," << p.position.y << ","
-             << p.velocity.x << "," << p.velocity.y << "," << p.mass << "," << p.radius << std::endl;
-    }
-    file.close();
-}
-
-void write_tree(Node* root, int f) {
-    std::ofstream file("out/tree_" + std::to_string(f) + ".csv");
-    file << "pos_x,pos_y,size_x,size_y,center_of_mass_x,center_of_mass_y,mass" << std::endl;
-    std::queue<Node*> queue;
-    queue.push(root);
-    while (!queue.empty()) {
-        Node* node = queue.front();
-        queue.pop();
-        // only write external nodes
-        file << node->position.x << "," << node->position.y << ","
-                << node->size.x << "," << node->size.y << ","
-                << node->center_of_mass.x << "," << node->center_of_mass.y << ","
-                << node->mass << std::endl;    
-        // enqueue children
-        for (Node* child : node->children) {
-            queue.push(child);
-        }
-    }
-    file.close();
-}
+constexpr double G = 1.0; // gravitational constant
     
 // compute force acting on particle p1 from a body (particle or node)
 Vec2 force(Vec2 p1, double m1, Vec2 p2, double m2) {
@@ -59,9 +29,11 @@ Vec2 compute_force(Particle* p, Node* node) {
             }
         }
     } else {
+        // check if far enough away
         double d = (node->center_of_mass - p->position).length();
         double s = node->size.x;
-        if (s / d < theta) { // use center of mass approximation
+        if (s / d < theta) { 
+            // use center of mass approximation
             f += force(p->position, p->mass, node->center_of_mass, node->mass);    
         } else {
             // recursively traverse children
@@ -73,25 +45,34 @@ Vec2 compute_force(Particle* p, Node* node) {
     return f;
 }
 
-void step(std::vector<Particle>& particles, double dt, int f) {
+// O(N^2) naive implementation for benchmarking
+Vec2 compute_force_naive(Particle* p, const std::vector<Particle>& particles) {
+    Vec2 f = {0, 0};
+    for (const Particle& other : particles) {
+        if (&other != p) { // avoid self-interaction
+            f += force(p->position, p->mass, other.position, other.mass);
+        }
+    }
+    return f;
+}
+
+// explicit euler time step (mby est other schemes)
+Node* step(std::vector<Particle>& particles, double dt) {
     Node* root = new Node(Vec2(0, 0), Vec2(100, 100)); // new tree every step
     // insert particles into quadtree
     for (Particle& p : particles) {   
         root->insert(&p);
     }  
-    write_tree(root, f);  
     // update particles
     for (Particle& p : particles) {    
         Vec2 force = compute_force(&p, root);
         p.velocity += force / p.mass * dt;
         p.position += p.velocity * dt;
     }
-    // cleanup
-    delete root;    
+    return root; // careful memory leak (should delete here, find solution for tree output)
 }
 
 int main() {
-
     std::vector<Particle> particles; // Global vector of particles (system state)
     for (int i = 0; i < numParticles; ++i) {
         Particle p;
@@ -103,12 +84,14 @@ int main() {
         particles.push_back(p);
     }
 
-    // std::cout << "Test" << std::endl;
-
+    // std::vector<Particle> particles = ioHandler::read_input("input/solar_system.csv");
+   
     for (int f = 0; f < 100; ++f) {
-        step(particles, dt, f);
-        write_snapshot(particles, f);
+        Node* root = step(particles, dt);
+        ioHandler::write_snapshot(particles, f);
+        ioHandler::write_tree(root, f);
+        delete root; // free memory
     }
-
+    
     return 0;
 }

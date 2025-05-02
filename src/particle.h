@@ -1,3 +1,6 @@
+#ifndef PARTICLE_H
+#define PARTICLE_H
+
 #include "vec2.h"
 
 struct Particle {
@@ -7,3 +10,5 @@ struct Particle {
     double radius;
     int id;
 };
+
+#endif // PARTICLE_H

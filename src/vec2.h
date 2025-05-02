@@ -1,3 +1,6 @@
+#ifndef VEC2_H
+#define VEC2_H
+
 #include <cmath>
 
 struct Vec2 {
@@ -45,3 +48,5 @@ struct Vec2 {
         return Vec2(0, 0);
     }
 };
+
+#endif // VEC2_H

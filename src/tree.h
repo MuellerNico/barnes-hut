@@ -1,7 +1,10 @@
+#ifndef TREE_H
+#define TREE_H
+
 #include "particle.h"
 #include <vector>
 
-#define MAX_PARTICLES 1
+#define MAX_PARTICLES 1 // particles per external node
 
 struct Node {
     Vec2 position;
@@ -23,7 +26,7 @@ struct Node {
 
     void subdivide();
 
-    std::vector<Particle*> get_all_particles();
+    // std::vector<Particle*> get_all_particles();
 };
 
 // Destructor to clean up child nodes
@@ -82,12 +85,14 @@ void Node::subdivide() {
     particles.clear();
 }
 
-// Get all particles in the node and its children recursively
-std::vector<Particle*> Node::get_all_particles() {
-    std::vector<Particle*> all_particles = particles;
-    for (Node* child : children) {
-        std::vector<Particle*> child_particles = child->get_all_particles();
-        all_particles.insert(all_particles.end(), child_particles.begin(), child_particles.end());
-    }
-    return all_particles;
-}
+// Get all particles in the node and its children recursively (computationally expensive)
+// std::vector<Particle*> Node::get_all_particles() {
+//     std::vector<Particle*> all_particles = particles;
+//     for (Node* child : children) {
+//         std::vector<Particle*> child_particles = child->get_all_particles();
+//         all_particles.insert(all_particles.end(), child_particles.begin(), child_particles.end());
+//     }
+//     return all_particles;
+// }
+
+#endif // TREE_H
