@@ -9,11 +9,9 @@ def animate(i):
     data = pd.read_csv(f"out/frame_{i}.csv")
     tree = pd.read_csv(f"out/tree_{i}.csv")
     
-    # Clear the current plot
-    ax.cla()
+    ax.clear()
     
-    # Plot the positions of the bodies
-    ax.scatter(data['pos_x'], data['pos_y'], s=10)
+    ax.scatter(data['pos_x'], data['pos_y'], s=data['radius']*10, c='blue')
 
     # draw boxes around the quadtree nodes
     for index, row in tree.iterrows():
@@ -25,23 +23,17 @@ def animate(i):
         rect = plt.Rectangle((x, y), size_x, size_y, linewidth=1, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
     
-    # Set the limits and labels
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 100)
     ax.set_xlabel('X Position')
     ax.set_ylabel('Y Position')
-    ax.set_title(f'Time Step: {i}')
-    # Optionally, you can add a grid
-    ax.grid(True)
+    ax.set_title(f'Frame: {i}')
 
 # Create a figure and axis
 fig, ax = plt.subplots(figsize=(8, 8))
 # Set the limits and labels
 ax.set_xlim(0, 100)
 ax.set_ylim(0, 100)
-# Optionally, you can add a grid
-ax.grid(True)
-# Create an animation
+# Create GIF
 ani = animation.FuncAnimation(fig, animate, frames=100, interval=100)
-# Save the animation as a GIF
-ani.save('n_body_simulation.gif', writer='pillow', fps=10)
+ani.save('simulation.gif', writer='pillow', fps=10)

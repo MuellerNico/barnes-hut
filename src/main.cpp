@@ -5,7 +5,7 @@
 #include <string>
 #include <queue>
 
-constexpr int numParticles = 10; 
+constexpr int numParticles = 100; 
 constexpr double theta = 0.5; // threshold. using center of mass approximation if s/d < theta. If zero, degenerates to brute force
 constexpr double dt = 0.01; // time step
 constexpr double G = 1.0; // gravitational constant ToDo: correctly scale masses and distances
@@ -96,9 +96,9 @@ int main() {
     for (int i = 0; i < numParticles; ++i) {
         Particle p;
         p.position = Vec2(rand() % 100, rand() % 100);
-        p.velocity = Vec2(rand() % 10, rand() % 10);
-        p.mass = 1.0;
-        p.radius = 1.0;
+        p.velocity = Vec2(rand() % 10, rand() % 10) - Vec2(5, 5);
+        p.mass = rand() % 5 + 1;
+        p.radius = p.mass;
         p.id = i;
         particles.push_back(p);
     }
