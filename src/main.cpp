@@ -5,6 +5,7 @@
 // - correct scaling of masses, G etc
 // - validate model 
 // - benchmark tree vs naive
+// - delete if collided
 
 constexpr int numParticles = 50; 
 constexpr double theta = 0.5; // threshold. using center of mass approximation if s/d < theta. If zero, degenerates to brute force
@@ -22,10 +23,11 @@ Vec2 force(Vec2 p1, double m1, Vec2 p2, double m2) {
 // force acting on particle p from a node/quad
 Vec2 compute_force(Particle* p, Node* node) {
     Vec2 f = {0, 0};
-    if (node->particles.size() > 0) { // external node, calculate force from particles (should maybe be only 1?)
+    if (node->particles.size() > 0) { // external node, calculate force from particles (usually 1 body per leaf)
         for (Particle* other : node->particles) {
             if (other != p) { // avoid self-interaction
                 f += force(p->position, p->mass, other->position, other->mass);
+                // maybe handle collisions
             }
         }
     } else {
