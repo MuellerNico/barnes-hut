@@ -1,11 +1,11 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
-#include "vec2.h"
+#include "vec3.h"
 
 struct Particle {
-    Vec2 position;
-    Vec2 velocity;
+    Vec3 position;
+    Vec3 velocity;
     double mass;
     double radius;
     int id;
