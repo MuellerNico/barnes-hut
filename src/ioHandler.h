@@ -15,13 +15,13 @@ struct IOHandler {
     std::ofstream tree_file;
     
     IOHandler() {
-        position_file.open("out/data.csv");
+        position_file.open("output/data.csv");
         if (!position_file.is_open()) {
             std::cerr << "Error opening file" << std::endl;
         }
         position_file << "frame,time,particle_id,pos_x,pos_y,pos_z,vel_x,vel_y,vel_z,mass,radius" << std::endl;
         position_file.flush();
-        tree_file.open("out/tree.csv");
+        tree_file.open("output/tree.csv");
         if (!tree_file.is_open()) {
             std::cerr << "Error opening file" << std::endl;
         }
@@ -61,70 +61,7 @@ struct IOHandler {
         tree_file.flush();    
     }   
 
-    // std::vector<Particle> read_input(const std::string& filename) {
-    //     std::ifstream file(filename);
-    //     std::vector<Particle> particles;
-    //     if (!file.is_open()) {
-    //         std::cerr << "Error opening file for reading input data." << std::endl;
-    //         return particles;
-    //     }
-    //     std::string line;
-    //     std::getline(file, line); // skip header
-    //     while (std::getline(file, line)) {
-    //         std::istringstream iss(line);
-    //         Particle p;
-    //         p.id = particles.size(); // assign ID based on order of reading
-    //         char comma; // to ignore commas
-    //         iss >> p.position.x >> comma
-    //             >> p.position.y >> comma
-    //             >> p.velocity.x >> comma
-    //             >> p.velocity.y >> comma
-    //             >> p.mass >> comma
-    //             >> p.radius;
-    //         particles.push_back(p);
-    //     }
-    //     file.close();
-
-    //     // scale positions to fit in the range [10, 90] while keeping the aspect ratio consistent
-    //     double min_x = particles[0].position.x;
-    //     double min_y = particles[0].position.y;
-    //     double max_x = particles[0].position.x;
-    //     double max_y = particles[0].position.y;
-    //     for (const Particle& p : particles) {
-    //         if (p.position.x < min_x) min_x = p.position.x;
-    //         if (p.position.y < min_y) min_y = p.position.y;
-    //         if (p.position.x > max_x) max_x = p.position.x;
-    //         if (p.position.y > max_y) max_y = p.position.y;
-    //     }
-    //     double range_x = max_x - min_x;
-    //     double range_y = max_y - min_y;
-    //     double scale = 80.0 / std::max(range_x, range_y); // use the larger range to keep aspect ratio
-    //     double offset_x = 10 + (80.0 - scale * range_x) / 2.0; // center in the range [10, 90]
-    //     double offset_y = 10 + (80.0 - scale * range_y) / 2.0; // center in the range [10, 90]
-    //     for (Particle& p : particles) {
-    //         p.position.x = offset_x + (p.position.x - min_x) * scale;
-    //         p.position.y = offset_y + (p.position.y - min_y) * scale;
-    //         p.velocity.x *= scale;
-    //         p.velocity.y *= scale;
-    //     }
-    //     // scale masses and radii
-    //     double max_mass = 0;
-    //     for (const Particle& p : particles) {
-    //         if (p.mass > max_mass) max_mass = p.mass;
-    //     }
-    //     for (Particle& p : particles) {
-    //         p.mass /= max_mass; // normalize mass
-    //         p.radius = p.mass; // set radius equal to mass for simplicity
-    //     }
-        
-    //     // print particles for debugging
-    //     for (const Particle& p : particles) {
-    //         std::cout << "Particle ID: " << p.id << ", Position: (" << p.position.x << ", " << p.position.y << "), "
-    //                   << "Velocity: (" << p.velocity.x << ", " << p.velocity.y << "), "
-    //                   << "Mass: " << p.mass << ", Radius: " << p.radius << std::endl;
-    //     }
-    //     return particles;
-    // }
+    // std::vector<Particle> read_input(){}
 };
 
 #endif // IOHANDLER_H

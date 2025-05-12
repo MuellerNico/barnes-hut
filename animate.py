@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import pandas as pd
 
-# Load the data once
-data = pd.read_csv("out/data.csv")
-tree = pd.read_csv("out/tree.csv")
+# load data 
+data = pd.read_csv("output/data.csv")
+tree = pd.read_csv("output/tree.csv")
 
 def animate(i):
     frame_data = data[data['frame'] == i]
@@ -30,12 +30,11 @@ def animate(i):
     ax.set_ylabel('Y Position')
     ax.set_title(f'Frame: {i}')
 
-# Create a figure and axis
 fig, ax = plt.subplots(figsize=(8, 8))
-# Set the limits and labels
 ax.set_xlim(0, 100)
 ax.set_ylim(0, 100)
+
 # Create GIF
 num_frames = data['frame'].nunique()
 ani = animation.FuncAnimation(fig, animate, frames=num_frames, interval=100)
-ani.save('simulation.gif', writer='pillow', fps=10)
+ani.save('results/simulation.gif', writer='pillow', fps=10)
