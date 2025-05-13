@@ -19,7 +19,7 @@ struct IOHandler {
         if (!position_file.is_open()) {
             std::cerr << "Error opening file" << std::endl;
         }
-        position_file << "frame,time,particle_id,pos_x,pos_y,pos_z,vel_x,vel_y,vel_z,mass,radius" << std::endl;
+        position_file << "frame,time,pos_x,pos_y,pos_z,vel_x,vel_y,vel_z,mass,radius" << std::endl;
         position_file.flush();
         tree_file.open("output/tree.csv");
         if (!tree_file.is_open()) {
@@ -36,7 +36,7 @@ struct IOHandler {
 
     void write_snapshot(int frame, const std::vector<Particle>& particles, double t) {
         for (const Particle& p : particles) {
-            position_file << frame << "," << t << "," << p.id << "," << p.position.x << "," << p.position.y << "," << p.position.z << ","
+            position_file << frame << "," << t << "," << p.position.x << "," << p.position.y << "," << p.position.z << ","
                     << p.velocity.x << "," << p.velocity.y << "," << p.velocity.z << ","
                     << p.mass << "," << p.radius << std::endl;
         }
@@ -61,7 +61,8 @@ struct IOHandler {
         tree_file.flush();    
     }   
 
-    // std::vector<Particle> read_input(){}
+
+    std::vector<Particle> read_input(){}
 };
 
 #endif // IOHANDLER_H

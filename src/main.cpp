@@ -100,7 +100,6 @@ int main() {
         p.velocity = rand_dir * speed; // random direction
         p.mass = rand() % 5 + 1;
         p.radius = p.mass;
-        p.id = i;
         particles.push_back(p);
     }
 

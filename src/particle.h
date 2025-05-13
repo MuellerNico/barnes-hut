@@ -8,7 +8,6 @@ struct Particle {
     Vec3 velocity;
     double mass;
     double radius;
-    int id;
 };
 
 #endif // PARTICLE_H
