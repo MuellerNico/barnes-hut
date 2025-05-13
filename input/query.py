@@ -3,6 +3,9 @@ import pandas as pd
 from astropy.time import Time
 from datetime import datetime, timedelta
 
+# This script queries the JPL Horizons system for the positions and velocities of solar system bodies
+# Data is saved in astronomical units (AU), years (yr) and solar masses (M_sun)
+
 # Define target body IDs (JPL Horizons)
 bodies = {
     'Sun': 10,
@@ -30,8 +33,8 @@ data = []
 for name, body_id in bodies.items():
     obj = Horizons(id=body_id, location='@sun', epochs=dates)
     vec = obj.vectors()
-    print(f"Data for {name}:")
-    print(vec)
+    # print(f"Data for {name}:") # Debug
+    # print(vec)
     for i in range(len(vec)):
         row = {
             'name': name,
@@ -60,15 +63,18 @@ solar_system_data = {
     'Pluto':  {'mass': 1.309e22, 'radius': 1.188e6},
 }
 
+M_SUN = 1.989e30  # mass of the Sun in kg
+AU = 1.496e11  # astronomical unit in meters
+
 # Add mass to the data
 for row in data:
     name = row['name']
     if name in solar_system_data:
-        row['mass (kg)'] = solar_system_data[name]['mass']
-        row['radius (m)'] = solar_system_data[name]['radius']
+        row['mass (M_sun)'] = solar_system_data[name]['mass'] / M_SUN
+        row['radius (AU)'] = solar_system_data[name]['radius'] / AU
     else:
-        row['mass (kg)'] = 0  # or some default value
-        row['radius (m)'] = 0
+        row['mass (M_sun)'] = 0
+        row['radius (AU)'] = 0
 
 # Export to CSV
 df = pd.DataFrame(data)
