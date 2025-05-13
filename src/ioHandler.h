@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <queue>
+#include <stdexcept>
 #include "node.h"
 
 
@@ -61,8 +62,24 @@ struct IOHandler {
         tree_file.flush();    
     }   
 
+    std::vector<Particle> read_snapshot(const std::string& filename) {
+        std::vector<Particle> particles;
 
-    std::vector<Particle> read_input(){}
+        std::ifstream file(filename, std::ios::binary);
+        if (!file) {
+            std::cerr << "Error opening file: " << filename << std::endl;
+            return particles;
+        }
+
+        uint32_t count = 0;
+        file.read(reinterpret_cast<char*>(&count), sizeof(uint32_t));
+
+        particles.resize(count);
+        file.read(reinterpret_cast<char*>(particles.data()), count * sizeof(Particle));
+
+        return particles;
+    }
+
 };
 
 #endif // IOHANDLER_H
