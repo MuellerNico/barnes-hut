@@ -21,7 +21,7 @@ bodies = {
     'Pluto': 999
 }
 
-# date range
+# date range (10 days)
 start_date = datetime(2025, 1, 1)
 end_date   = datetime(2025, 1, 10)
 num_steps = (end_date - start_date).days + 1 # step size of 1 day
@@ -66,7 +66,7 @@ solar_system_data = {
 M_SUN = 1.989e30  # mass of the Sun in kg
 AU = 1.496e11  # astronomical unit in meters
 
-# Add mass to the data
+# Add mass and radius to dataset
 for row in data:
     name = row['name']
     if name in solar_system_data:

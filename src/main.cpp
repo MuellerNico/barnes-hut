@@ -12,31 +12,18 @@ int main() {
     srand(0); // seed random number generator
     IOHandler ioHandler; // IO handler for writing output
     std::vector<Particle> particles; // Global vector of particles (system state)
-
-    particles = ioHandler.read_snapshot("input/snapshots/2460676.5.bin");
-    
-    std::cout << "Particles: " << particles.size() << std::endl;
-    for (const Particle& p : particles) {
-        std::cout << p.position.x << " " << p.position.y << " " << p.position.z << std::endl;
-    }
-    return 0;
-    
+    std::vector<Particle> particles_end_state;
+    particles = ioHandler.read_snapshot("input/snapshots/2460676.5.bin"); // read snapshot from file
+    // only take the first 5 particles
+    particles.resize(5);
+    ioHandler.print(particles); 
+    // particles_end_state = ioHandler.read_snapshot("input/snapshots/2460686.5.bin"); // read snapshot from file
     std::cout << "G=" << G << std::endl;
-
-    // init
-    for (int i = 0; i < numParticles; ++i) {
-        Particle p;
-        p.position = Vec3(rand() % 100, rand() % 100, rand() % 100);
-        Vec3 rand_dir = Vec3(rand(), rand(), rand()).normalized() * 2 - Vec3(1, 1, 1); // random direction
-        double speed = rand() % 10 + 20; // random speed
-        p.velocity = rand_dir * speed; // random direction
-        p.mass = rand() % 5 + 1;
-        p.radius = p.mass;
-        particles.push_back(p);
-    }
+    std::cout << "Please ensure that input data uses correct units (AU, yr, M_sun)" << std::endl;
 
     double t = 0; // time
-    for (int f = 0; f < 100; ++f) {
+    for (int f = 0; f < 365; ++f) {
+        std::cout << "f=" << f << std::endl;
         Node* root = step(particles, dt);
         ioHandler.write_snapshot(f, particles, t);
         ioHandler.write_tree(root, f);

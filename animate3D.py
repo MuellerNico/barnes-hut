@@ -9,13 +9,21 @@ import pandas as pd
 data = pd.read_csv("output/data.csv")
 tree = pd.read_csv("output/tree.csv")
 
+# find the min and max values for each axis
+x_min, x_max = data['pos_x'].min(), data['pos_x'].max()
+y_min, y_max = data['pos_y'].min(), data['pos_y'].max()
+z_min, z_max = data['pos_z'].min(), data['pos_z'].max()
+
+xlim = (x_min, x_max)
+ylim = (y_min, y_max)
+zlim = (z_min, z_max)
+
 def animate(i):
     frame_data = data[data['frame'] == i]
     frame_tree = tree[tree['frame'] == i]
     
     ax.clear()
-    ax.scatter(frame_data['pos_x'], frame_data['pos_y'], frame_data['pos_z'], 
-               s=frame_data['radius']*10, c='blue')
+    ax.scatter(frame_data['pos_x'], frame_data['pos_y'], frame_data['pos_z'], c='blue')
 
     # # Draw boxes around the octree nodes using pos as origin and sizes
     # for _, row in frame_tree.iterrows():
@@ -45,9 +53,9 @@ def animate(i):
     #     for start, end in edges:
     #         ax.plot3D(*zip(corners[start], corners[end]), color="r")
     
-    ax.set_xlim(0, 100)
-    ax.set_ylim(0, 100)
-    ax.set_zlim(0, 100)
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
+    ax.set_zlim(zlim)
     ax.set_xlabel('X Position')
     ax.set_ylabel('Y Position')
     ax.set_zlabel('Z Position')
@@ -56,9 +64,9 @@ def animate(i):
 
 fig = plt.figure(figsize=(8, 8))
 ax = fig.add_subplot(111, projection='3d')
-ax.set_xlim(0, 100)
-ax.set_ylim(0, 100)
-ax.set_zlim(0, 100)
+ax.set_xlim(xlim)
+ax.set_ylim(ylim)
+ax.set_zlim(zlim)
 
 # Create GIF
 num_frames = data['frame'].nunique()

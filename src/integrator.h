@@ -1,3 +1,6 @@
+#ifndef INTEGRATOR_H
+#define INTEGRATOR_H
+
 #include <iostream>
 #include "node.h"
 #include "particle.h"
@@ -54,7 +57,21 @@ Vec3 compute_force_naive(Particle* p, const std::vector<Particle>& particles) {
 
 // explicit euler time step (mby est other schemes)
 Node* step(std::vector<Particle>& particles, double dt) {
-    Node* root = new Node(Vec3(0, 0, 0), Vec3(100, 100, 100)); // new tree every step
+    // find bounding box
+    Vec3 min = {0, 0, 0};
+    Vec3 max = {0, 0, 0};
+    for (const Particle& p : particles) {
+        min.x = std::min(min.x, p.position.x);
+        min.y = std::min(min.y, p.position.y);
+        min.z = std::min(min.z, p.position.z);
+        max.x = std::max(max.x, p.position.x);
+        max.y = std::max(max.y, p.position.y);
+        max.z = std::max(max.z, p.position.z);
+    }
+    min += Vec3(-1, -1, -1); // add some padding
+    max += Vec3(1, 1, 1);
+   
+    Node* root = new Node(min, max - min); // create root node
     // insert particles into quadtree
     for (Particle& p : particles) {   
         root->insert(&p);
@@ -67,3 +84,5 @@ Node* step(std::vector<Particle>& particles, double dt) {
     }
     return root; // careful memory leak (should delete here, find solution for tree output)
 }
+
+#endif // INTEGRATOR_H

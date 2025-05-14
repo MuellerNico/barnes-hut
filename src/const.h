@@ -10,7 +10,7 @@ constexpr double G = 4 * M_PI * M_PI; // gravitational constant in AU^3 / (M_sun
 
 constexpr int numParticles = 50; 
 constexpr double theta = 0.5; // threshold. using center of mass approximation if s/d < theta. If zero, degenerates to brute force
-constexpr double dt = 0.01; // time step
+constexpr double dt = 1.0 / 365.25;// / 24.0; // time step in years (= one hour)
 
 constexpr double eps = 1e-8; // small value to avoid division by zero
 constexpr double eps2 = eps * eps; // for force calculation

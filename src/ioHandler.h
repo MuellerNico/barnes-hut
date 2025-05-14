@@ -8,8 +8,6 @@
 #include <stdexcept>
 #include "node.h"
 
-
-// TODO use binary files instead of csv
 struct IOHandler {
 
     std::ofstream position_file;
@@ -80,6 +78,27 @@ struct IOHandler {
         return particles;
     }
 
+    void write_snapshot(const std::string& filename, const std::vector<Particle>& particles) {
+        std::ofstream file(filename, std::ios::binary);
+        if (!file) {
+            std::cerr << "Error opening file: " << filename << std::endl;
+            return;
+        }
+        uint32_t count = particles.size();
+        file.write(reinterpret_cast<const char*>(&count), sizeof(uint32_t));
+        file.write(reinterpret_cast<const char*>(particles.data()), count * sizeof(Particle));
+        file.close();
+    }
+    
+    void print(std::vector<Particle>& particles) {
+        std::cout << "Particles: " << particles.size() << std::endl;
+        for (int i = 0; i < particles.size(); ++i) {
+            std::cout << i << " pos=(" << particles[i].position.x << ", " << particles[i].position.y << ", " << particles[i].position.z << ")"
+                    << " vel=(" << particles[i].velocity.x << ", " << particles[i].velocity.y << ", " << particles[i].velocity.z << ")"
+                    << " mass=" << particles[i].mass << " radius=" << particles[i].radius << std::endl;
+        }
+        std::cout << std::endl;
+    }
 };
 
 #endif // IOHANDLER_H
