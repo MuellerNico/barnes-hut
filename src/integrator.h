@@ -34,6 +34,7 @@ Vec3 compute_force(Particle* p, Node* node) {
         if (s / (d + eps) < theta) { 
             // use center of mass approximation
             f += force(p->position, p->mass, node->center_of_mass, node->mass);    
+            com_approx++;
         } else {
             // recursively traverse children
             for (Node* child : node->children) { 
@@ -68,8 +69,8 @@ Node* step(std::vector<Particle>& particles, double dt) {
         max.y = std::max(max.y, p.position.y);
         max.z = std::max(max.z, p.position.z);
     }
-    min += Vec3(-1, -1, -1); // add some padding
-    max += Vec3(1, 1, 1);
+    min += Vec3(-eps, -eps, -eps); // add some padding
+    max += Vec3(eps, eps, eps);
    
     Node* root = new Node(min, max - min); // create root node
     // insert particles into quadtree

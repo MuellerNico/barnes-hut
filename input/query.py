@@ -12,7 +12,7 @@ bodies = {
     'Mercury': 199,
     'Venus': 299,
     'Earth': 399,
-    'Moon': 301,
+    # 'Moon': 301,
     'Mars': 499,
     'Jupiter': 599,
     'Saturn': 699,
@@ -22,10 +22,9 @@ bodies = {
 }
 
 # date range (10 days)
-start_date = datetime(2025, 1, 1)
-end_date   = datetime(2025, 1, 10)
-num_steps = (end_date - start_date).days + 1 # step size of 1 day
-dates = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(num_steps)]
+start_year = 2000
+end_year = 2025
+dates = [datetime(year, 1, 1) for year in range(start_year, end_year + 1)]
 dates = Time(dates).jd
 
 # query each body
@@ -73,6 +72,7 @@ for row in data:
         row['mass (M_sun)'] = solar_system_data[name]['mass'] / M_SUN
         row['radius (AU)'] = solar_system_data[name]['radius'] / AU
     else:
+        print("Warning: unknown body")
         row['mass (M_sun)'] = 0
         row['radius (AU)'] = 0
 

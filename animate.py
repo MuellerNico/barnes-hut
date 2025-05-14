@@ -7,12 +7,20 @@ import pandas as pd
 data = pd.read_csv("output/data.csv")
 tree = pd.read_csv("output/tree.csv")
 
+# TODO project on reasonable axis
+# find the min and max values for each axis
+x_min, x_max = data['pos_x'].min(), data['pos_x'].max()
+y_min, y_max = data['pos_y'].min(), data['pos_y'].max()
+
+xlim = (x_min, x_max)
+ylim = (y_min, y_max)
+
 def animate(i):
     frame_data = data[data['frame'] == i]
     frame_tree = tree[tree['frame'] == i]
     
     ax.clear()
-    ax.scatter(frame_data['pos_x'], frame_data['pos_y'], s=frame_data['radius']*10, c='blue')
+    ax.scatter(frame_data['pos_x'], frame_data['pos_y'], c='blue')
 
     # # Draw boxes around the quadtree nodes
     # for index, row in frame_tree.iterrows():
@@ -24,15 +32,16 @@ def animate(i):
     #     rect = plt.Rectangle((x, y), size_x, size_y, linewidth=1, edgecolor='r', facecolor='none')
     #     ax.add_patch(rect)
     
-    ax.set_xlim(0, 100)
-    ax.set_ylim(0, 100)
+    # log scale
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
     ax.set_xlabel('X Position')
     ax.set_ylabel('Y Position')
     ax.set_title(f'Frame: {i}')
 
 fig, ax = plt.subplots(figsize=(8, 8))
-ax.set_xlim(0, 100)
-ax.set_ylim(0, 100)
+ax.set_xlim(xlim)
+ax.set_ylim(ylim)
 
 # Create GIF
 num_frames = data['frame'].nunique()

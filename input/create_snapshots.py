@@ -9,7 +9,7 @@ import os
 #   - 8 * 8 bytes: x, y, z, vx, vy, vz, mass, radius (double)
 
 csv_file = "solar_system.csv"
-out_dir = "snapshots"
+out_dir = "jpl_horizons"
 os.makedirs(out_dir, exist_ok=True)
 
 df = pd.read_csv(csv_file)

@@ -33,7 +33,7 @@ struct IOHandler {
         tree_file.close();
     }
 
-    void write_snapshot(int frame, const std::vector<Particle>& particles, double t) {
+    void write_frame(int frame, const std::vector<Particle>& particles, double t) {
         for (const Particle& p : particles) {
             position_file << frame << "," << t << "," << p.position.x << "," << p.position.y << "," << p.position.z << ","
                     << p.velocity.x << "," << p.velocity.y << "," << p.velocity.z << ","
