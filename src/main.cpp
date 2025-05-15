@@ -22,11 +22,11 @@ int main() {
     std::cout << "dt=" << dt << std::endl << std::endl;
 
     for (int i = 0; i < num_steps; ++i) {
-        Node* root = step(particles, dt);
+        Node* root = step_leapfrog(particles, dt);
         t += dt;
         if (i % (num_steps / 25) == 0) {
             int f = i / (num_steps / 25);
-            // std::cout << "Progress: " << f << "%, t=" << t << " yr" << std::endl;
+            std::cout << "Progress: " << f << ", t=" << t << " yr" << std::endl;
             // ioHandler.write_snapshot(f, particles, t); // write snapshot to file
             // ioHandler.write_tree(root, f); // write tree to file
             std::string filename = "output/snapshots/" + std::to_string(f) + ".bin";
