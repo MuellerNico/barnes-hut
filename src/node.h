@@ -3,6 +3,7 @@
 
 #include "particle.h"
 #include <vector>
+#include <iostream>
 
 #define MAX_PARTICLES 1 // particles per external node
 
@@ -53,11 +54,17 @@ void Node::insert(Particle* particle) {
             subdivide();
         }
     } else {
+        bool inserted = false;
         for (Node* child : children) {
             if (child->contains(particle->position)) {
                 child->insert(particle);
-                return;
+                inserted = true;
+                break;
             }
+        }
+        if (!inserted) {
+            std::cerr << "Error: Particle not inserted into any child." << std::endl;
+            exit(1); // exit if particle is not inserted
         }
     }
 }

@@ -115,4 +115,12 @@ void IOHandler::print(std::vector<Particle>& particles) {
     std::cout << std::endl;
 }
 
+void print_masses(std::vector<Particle>& particles) {
+    std::cout << "Masses: " << particles.size() << std::endl;
+    for (int i = 0; i < particles.size(); ++i) {
+        std::cout << i << " mass=" << particles[i].mass << std::endl;
+    }
+    std::cout << std::endl;
+}
+
 #endif // IOHANDLER_H

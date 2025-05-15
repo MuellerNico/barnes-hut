@@ -57,8 +57,8 @@ Vec3 compute_force_naive(Particle* p, const std::vector<Particle>& particles) {
 // build octree from particles
 Node* build_tree(std::vector<Particle>& particles) {
     // find bounding box
-    Vec3 min = {0, 0, 0}; // note: zero works here because sun is at origin
-    Vec3 max = {0, 0, 0};
+    Vec3 min = particles[0].position;   
+    Vec3 max = particles[0].position;
     for (const Particle& p : particles) {
         min.x = std::min(min.x, p.position.x);
         min.y = std::min(min.y, p.position.y);
@@ -67,20 +67,28 @@ Node* build_tree(std::vector<Particle>& particles) {
         max.y = std::max(max.y, p.position.y);
         max.z = std::max(max.z, p.position.z);
     }
-    min += Vec3(-eps, -eps, -eps); // add some padding
-    max += Vec3(eps, eps, eps);
+    // padding
+    double diag = (max - min).length();
+    min += Vec3(-eps*diag, -eps*diag, -eps*diag);
+    max += Vec3(eps*diag, eps*diag, eps*diag);
    
     Node* root = new Node(min, max - min); // create root node
     // insert particles into octree
-    for (Particle& p : particles) {   
+    for (Particle& p : particles) {  
+        if (!root->contains(p.position)) {
+            std::cerr << "Particle out of bounds: " << p.position.x << ", " << p.position.y << ", " << p.position.z << std::endl;
+            exit(1); // exit if particle is out of bounds
+        }
         root->insert(&p);
     }  
     return root;
 }
 
 // explicit euler time step
-Node* step_euler(std::vector<Particle>& particles, double dt) {
+void step_euler(std::vector<Particle>& particles, double dt) {
+    #ifndef USE_NAIVE
     Node* root = build_tree(particles); // build tree
+    #endif
     // update particles TODO: parallel?
     for (Particle& p : particles) {    
         #ifdef USE_NAIVE
@@ -91,13 +99,11 @@ Node* step_euler(std::vector<Particle>& particles, double dt) {
         p.velocity += force / p.mass * dt;
         p.position += p.velocity * dt;
     }
-    return root;
 }
 
-Node* step_leapfrog(std::vector<Particle>& particles, double dt) {
-    Node* root;
+void step_leapfrog(std::vector<Particle>& particles, double dt) {
     #ifndef USE_NAIVE
-    root = build_tree(particles); // build tree
+    Node* root = build_tree(particles); // build tree
     #endif
     std::vector<Vec3> accelerations(particles.size());
     // compute accelerations
@@ -119,8 +125,10 @@ Node* step_leapfrog(std::vector<Particle>& particles, double dt) {
         p.position += dt * p.velocity;
     }
     // rebuild tree
+    #ifndef USE_NAIVE
     delete root; // free memory
     root = build_tree(particles);
+    #endif
     // compute accelerations again
     for (size_t i = 0; i < particles.size(); ++i) {
         #ifdef USE_NAIVE
@@ -134,7 +142,6 @@ Node* step_leapfrog(std::vector<Particle>& particles, double dt) {
     for (size_t i = 0; i < particles.size(); ++i) {
         particles[i].velocity += 0.5 * dt * accelerations[i];
     }
-    return root; // mby use smart pointer
 }
 
 #endif // INTEGRATOR_H
