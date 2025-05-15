@@ -56,10 +56,10 @@ Vec3 compute_force_naive(Particle* p, const std::vector<Particle>& particles) {
     return f;
 }
 
-// explicit euler time step (mby est other schemes)
-Node* step(std::vector<Particle>& particles, double dt) {
+// build octree from particles
+Node* build_tree(std::vector<Particle>& particles) {
     // find bounding box
-    Vec3 min = {0, 0, 0};
+    Vec3 min = {0, 0, 0}; // note: zero works here because sun is at origin
     Vec3 max = {0, 0, 0};
     for (const Particle& p : particles) {
         min.x = std::min(min.x, p.position.x);
@@ -73,10 +73,16 @@ Node* step(std::vector<Particle>& particles, double dt) {
     max += Vec3(eps, eps, eps);
    
     Node* root = new Node(min, max - min); // create root node
-    // insert particles into quadtree
+    // insert particles into octree
     for (Particle& p : particles) {   
         root->insert(&p);
     }  
+    return root;
+}
+
+// explicit euler time step
+Node* step_euler(std::vector<Particle>& particles, double dt) {
+    Node* root = build_tree(particles); // build tree
     // update particles TODO: parallel?
     for (Particle& p : particles) {    
         Vec3 force = compute_force(&p, root);
@@ -84,6 +90,37 @@ Node* step(std::vector<Particle>& particles, double dt) {
         p.position += p.velocity * dt;
     }
     return root; // careful memory leak (should delete here, find solution for tree output)
+}
+
+Node* step_leapfrog(std::vector<Particle>& particles, double dt) {
+    Node* root = build_tree(particles); // build tree
+    std::vector<Vec3> accelerations(particles.size());
+    // compute accelerations
+    for (size_t i = 0; i < particles.size(); ++i) {
+        Vec3 f = compute_force(&particles[i], root);
+        accelerations[i] = f / particles[i].mass;
+    }
+    // half-step velocities
+    for (size_t i = 0; i < particles.size(); ++i) {
+        particles[i].velocity += 0.5 * dt * accelerations[i];
+    }
+    // full step position update
+    for (Particle& p : particles) {
+        p.position += dt * p.velocity;
+    }
+    // rebuild tree
+    delete root; // free memory
+    root = build_tree(particles);
+    // compute accelerations again
+    for (size_t i = 0; i < particles.size(); ++i) {
+        Vec3 f = compute_force(&particles[i], root);
+        accelerations[i] = f / particles[i].mass;
+    }
+    // half-step velocities
+    for (size_t i = 0; i < particles.size(); ++i) {
+        particles[i].velocity += 0.5 * dt * accelerations[i];
+    }
+    return root; // mby use smart pointer
 }
 
 #endif // INTEGRATOR_H
