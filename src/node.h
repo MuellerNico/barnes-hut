@@ -9,23 +9,16 @@
 struct Node {
     Vec3 position;
     Vec3 size;
-
     std::vector<Node*> children;
     std::vector<Particle*> particles;
-    
     Vec3 center_of_mass = {0, 0, 0};
     double mass = 0;
 
     Node(const Vec3& position, const Vec3& size) : position(position), size(size) {}
-
     ~Node();
-
     bool contains(const Vec3& point) const;
-
     void insert(Particle* particle);
-
     void subdivide();
-
     bool is_leaf() const {
         return children.empty();
     }

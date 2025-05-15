@@ -15,6 +15,4 @@ constexpr double dt = 1.0 / 365.25 / 24; // time step [yr]
 constexpr double eps = 1e-8; // small length to avoid division by zero [AU]
 constexpr double eps2 = eps * eps;
 
-int com_approx = 0;
-
 #endif // CONST_H

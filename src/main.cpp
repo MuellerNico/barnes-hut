@@ -3,10 +3,6 @@
 #include "integrator.h"
 #include "const.h"
 
-// TODOs
-// - validate model 
-// - benchmark tree vs naive
-// - delete if collided
 
 int main() {
     srand(0); // seed random number generator
@@ -27,15 +23,13 @@ int main() {
         if (i % (num_steps / 25) == 0) {
             int f = i / (num_steps / 25);
             std::cout << "Progress: " << f << ", t=" << t << " yr" << std::endl;
-            // ioHandler.write_snapshot(f, particles, t); // write snapshot to file
-            // ioHandler.write_tree(root, f); // write tree to file
+            ioHandler.write_frame(f, particles, t); // write snapshot to file
+            ioHandler.write_tree(root, f); // write tree to file
             std::string filename = "output/snapshots/" + std::to_string(f) + ".bin";
             ioHandler.write_snapshot(filename, particles); 
         }
         delete root; // free memory
     }
     
-    std::cout << "Used " << com_approx << " center of mass approximations" << std::endl;
-
     return 0;
 }

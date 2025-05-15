@@ -4,7 +4,7 @@ import matplotlib.animation as animation
 import pandas as pd
 
 # load data 
-data = pd.read_csv("output/data.csv")
+data = pd.read_csv("output/frames.csv")
 tree = pd.read_csv("output/tree.csv")
 
 # TODO project on reasonable axis

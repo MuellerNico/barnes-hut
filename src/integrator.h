@@ -21,7 +21,6 @@ Vec3 compute_force(Particle* p, Node* node) {
         for (Particle* other : node->particles) {
             if (other != p) { // avoid self-interaction
                 f += force(p->position, p->mass, other->position, other->mass);
-                // TODO: handle collisions
                 if ((p->position - other->position).length() < p->radius + other->radius) {
                     std::cerr << "Collision." << std::endl;
                 }
@@ -34,7 +33,6 @@ Vec3 compute_force(Particle* p, Node* node) {
         if (s / (d + eps) < theta) { 
             // use center of mass approximation
             f += force(p->position, p->mass, node->center_of_mass, node->mass);    
-            com_approx++;
         } else {
             // recursively traverse children
             for (Node* child : node->children) { 
