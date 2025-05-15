@@ -83,19 +83,31 @@ Node* step_euler(std::vector<Particle>& particles, double dt) {
     Node* root = build_tree(particles); // build tree
     // update particles TODO: parallel?
     for (Particle& p : particles) {    
+        #ifdef USE_NAIVE
+        Vec3 force = compute_force_naive(&p, particles);
+        #else
         Vec3 force = compute_force(&p, root);
+        #endif
         p.velocity += force / p.mass * dt;
         p.position += p.velocity * dt;
     }
-    return root; // careful memory leak (should delete here, find solution for tree output)
+    return root;
 }
 
 Node* step_leapfrog(std::vector<Particle>& particles, double dt) {
-    Node* root = build_tree(particles); // build tree
+    Node* root;
+    #ifndef USE_NAIVE
+    root = build_tree(particles); // build tree
+    #endif
     std::vector<Vec3> accelerations(particles.size());
     // compute accelerations
     for (size_t i = 0; i < particles.size(); ++i) {
-        Vec3 f = compute_force(&particles[i], root);
+        Vec3 f;
+        #ifdef USE_NAIVE
+        f = compute_force_naive(&particles[i], particles);
+        #else
+        f = compute_force(&particles[i], root);
+        #endif
         accelerations[i] = f / particles[i].mass;
     }
     // half-step velocities
@@ -111,7 +123,11 @@ Node* step_leapfrog(std::vector<Particle>& particles, double dt) {
     root = build_tree(particles);
     // compute accelerations again
     for (size_t i = 0; i < particles.size(); ++i) {
+        #ifdef USE_NAIVE
+        Vec3 f = compute_force_naive(&particles[i], particles);
+        #else
         Vec3 f = compute_force(&particles[i], root);
+        #endif
         accelerations[i] = f / particles[i].mass;
     }
     // half-step velocities

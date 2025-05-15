@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+// #define USE_NAIVE // uncomment to use naive N^2 force calculation (no tree)
+
 constexpr double AU = 1.496e11; // L: 1 AU in meters
 constexpr double M_sun = 1.989e30; // M: M_sun mass of sun in kg
 constexpr double year = 3.154e7; // T: 1 year in seconds

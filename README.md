@@ -1,9 +1,12 @@
 # barnes-hut
 C++ implementation of the Barnes-Hut algorithm for N-body problems. Project work for 402-0812-00L Computational Statistical Physics FS2025, ETH Zürich.
 
-## How to run
+## Usage
 To compile and run the C++ software use the shell script (or the makefile and run the executable separately)
+
     $ sh run.sh
+
+To enable naive force computation (O(N^2)) uncomment `#define USE_NAIVE` in `const.h`. 
 
 ## Output
 Three forms of output files are written to `/output`: 
