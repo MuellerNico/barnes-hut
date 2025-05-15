@@ -53,4 +53,12 @@ struct Vec3 {
     }
 };
 
+Vec3 operator*(double scalar, const Vec3& vec) {
+    return Vec3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
+}
+
+Vec3 operator/(double scalar, const Vec3& vec) {
+    return Vec3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
+}
+
 #endif // VEC3_H
