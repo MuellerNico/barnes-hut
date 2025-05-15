@@ -11,7 +11,7 @@
 struct IOHandler {
     std::ofstream position_file;
     std::ofstream tree_file;
-    
+        
     IOHandler();
     ~IOHandler();
     void write_frame(int frame, const std::vector<Particle>& particles, double t);
@@ -29,6 +29,7 @@ IOHandler::IOHandler() {
     }
     position_file << "frame,time,pos_x,pos_y,pos_z,vel_x,vel_y,vel_z,mass,radius" << std::endl;
     position_file.flush();
+
     tree_file.open("output/tree.csv");
     if (!tree_file.is_open()) {
         std::cerr << "Error opening file" << std::endl;

@@ -80,7 +80,7 @@ for i in range(3):
 plt.legend()
 plt.grid()
 plt.tight_layout()
-plt.savefig(os.path.join(results_folder, "energies_over_time.png"))
+plt.savefig(os.path.join(results_folder, "energies_over_time.pdf"))
 
 # Plot position error
 plt.figure(figsize=(10, 6))
@@ -90,4 +90,4 @@ for body_idx in range(pos_diff.shape[1]):
     plt.plot(pos_diff[:, body_idx])
 plt.grid()
 plt.tight_layout()
-plt.savefig(os.path.join(results_folder, "position_difference.png"))
+plt.savefig(os.path.join(results_folder, "position_difference.pdf"))

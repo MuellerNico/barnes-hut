@@ -61,4 +61,8 @@ Vec3 operator/(double scalar, const Vec3& vec) {
     return Vec3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
 }
 
+bool operator==(const Vec3& a, const Vec3& b) {
+    return (a.x == b.x && a.y == b.y && a.z == b.z);
+}
+
 #endif // VEC3_H

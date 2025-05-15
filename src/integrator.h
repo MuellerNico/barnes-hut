@@ -21,9 +21,9 @@ Vec3 compute_force(Particle* p, Node* node) {
         for (Particle* other : node->particles) {
             if (other != p) { // avoid self-interaction
                 f += force(p->position, p->mass, other->position, other->mass);
-                if ((p->position - other->position).length() < p->radius + other->radius) {
-                    std::cerr << "Collision." << std::endl;
-                }
+                // if ((p->position - other->position).length() < p->radius + other->radius) {
+                //     std::cerr << "Collision." << std::endl;
+                // }
             }
         }
     } else { // internal node
@@ -75,10 +75,10 @@ Node* build_tree(std::vector<Particle>& particles) {
     Node* root = new Node(min, max - min); // create root node
     // insert particles into octree
     for (Particle& p : particles) {  
-        if (!root->contains(p.position)) {
-            std::cerr << "Particle out of bounds: " << p.position.x << ", " << p.position.y << ", " << p.position.z << std::endl;
-            exit(1); // exit if particle is out of bounds
-        }
+        // if (!root->contains(p.position)) {
+        //     std::cerr << "Particle out of bounds: " << p.position.x << ", " << p.position.y << ", " << p.position.z << std::endl;
+        //     exit(1); // exit if particle is out of bounds
+        // }
         root->insert(&p);
     }  
     return root;

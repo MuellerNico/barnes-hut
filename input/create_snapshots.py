@@ -2,7 +2,7 @@ import pandas as pd
 import struct
 import os
 
-# Split the big CSV file into binary files containing system state at different dates
+# Split the big Horizons CSV file into binary files
 
 # Binary format:
 #   - 4 bytes: number of particles (uint32)

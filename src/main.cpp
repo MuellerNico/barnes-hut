@@ -4,24 +4,12 @@
 #include "const.h"
 #include <sys/time.h>
 
-double walltime(){
-    struct timeval time;
-    if (gettimeofday(&time, NULL)) {
-        std::cout << "Unexpected error in walltime" << std::endl;
-        return 0;
-    }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
-}
-
 int main() {
-    srand(0); // seed random number generator
     IOHandler ioHandler; // IO handler for writing output
 
-    std::vector<Particle> particles = ioHandler.read_snapshot("input/gaia_stars.bin"); // Global vector of particles (system state)
-    // limit particles
-    particles.resize(7000);
-    // ioHandler.print(particles); // print particles to console
-
+    std::vector<Particle> particles = ioHandler.read_snapshot("input/gaia_stars_49992.bin"); // Global vector of particles (system state)
+    
+    // particles.resize(20000); // resize particles to numParticles
     // std::vector<Particle> particles = ioHandler.read_snapshot("input/jpl_horizons/0.bin"); // Global vector of particles (system state)
     // std::vector<Particle> particles_end_state = ioHandler.read_snapshot("input/jpl_horizons/25.bin");
 
@@ -29,8 +17,7 @@ int main() {
     double T = 1; // final time [yr]
     int num_steps = 5; // (T - t) / dt + 1; // number of time steps
 
-    double start_time = walltime(); // start time
-
+    
     for (int i = 0; i < num_steps; ++i) {
         step_leapfrog(particles, dt);
         t += dt;
@@ -44,14 +31,18 @@ int main() {
         //     // ioHandler.write_snapshot(filename, particles); 
         //     // ioHandler.print(particles); // print particles to console
         // }
+
     }
 
-    double end_time = walltime(); // end time
 
     std::cout << "\nParticles: " << particles.size() << std::endl;
     std::cout << "num_steps=" << num_steps << std::endl;
     std::cout << "dt=" << dt << std::endl;
-    std::cout << "Time elapsed: " << end_time - start_time << " seconds" << std::endl;
-    
+    #ifdef USE_NAIVE
+    std::cout << "Using naive N^2 force calculation" << std::endl;
+    #else
+    std::cout << "Using octree for force calculation" << std::endl;
+    #endif
+
     return 0;
 }

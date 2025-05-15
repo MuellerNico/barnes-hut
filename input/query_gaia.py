@@ -4,11 +4,11 @@ from astroquery.gaia import Gaia
 import numpy as np
 import struct
 
-Gaia.ROW_LIMIT = 10000  # max number of stars
+Gaia.ROW_LIMIT = 50000  # max number of stars
 
 # Simpler, safer query
 query = """
-SELECT TOP 10000
+SELECT TOP 50000
     source_id, ra, dec, parallax, pmra, pmdec, radial_velocity, phot_g_mean_mag
 FROM gaiadr3.gaia_source
 WHERE parallax > 1 AND radial_velocity IS NOT NULL AND pmra IS NOT NULL AND pmdec IS NOT NULL
