@@ -12,11 +12,11 @@ To test the benchmarking program, change the `SRC` inside the makefile from `mai
 To enable naive force computation (O(N^2)) uncomment `#define USE_NAIVE` in `const.h`.
 
 ## Directory Structure
-`root`: README, makefile, shell run script, python plotting scripts
-`/input`: Simulation input data (JPL Horizons & Gaia Archive data, python query scripts)
-`/output`: Simulation output data (benchmarking data, binary snapshots, CSV frames for animation, tree metadata)
-`/results`: Plots and animations
-`/src`: C++ code
+`root`: README, makefile, shell run script, python plotting scripts  
+`/input`: Simulation input data (JPL Horizons & Gaia Archive data, python query scripts)  
+`/output`: Simulation output data (benchmarking data, binary snapshots, CSV frames for animation, tree   metadata)
+`/results`: Plots and animations  
+`/src`: C++ code  
 
 ## Output
 Three forms of output files are written to `/output`: 
