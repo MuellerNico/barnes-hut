@@ -4,6 +4,7 @@
 #include <cmath>
 
 //#define USE_NAIVE // uncomment to use naive N^2 force calculation (no tree)
+#define MAX_PARTICLES 1 // max particles per external node
 
 constexpr double AU = 1.496e11; // L: 1 AU in meters
 constexpr double M_sun = 1.989e30; // M: M_sun mass of sun in kg

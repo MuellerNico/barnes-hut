@@ -6,24 +6,30 @@
 #include "particle.h"
 #include "const.h"
 
+struct Integrator {
+    Vec3 force(Vec3 p1, double m1, Vec3 p2, double m2);
+    Vec3 compute_force(Particle* p, Node* node);
+    Vec3 compute_force_naive(Particle* p, const std::vector<Particle>& particles);
+    Node* build_tree(std::vector<Particle>& particles);
+    void step_euler(std::vector<Particle>& particles, double dt);
+    void step_leapfrog(std::vector<Particle>& particles, double dt);
+};
+
 // compute force acting on particle p1 from a body (particle or node)
-Vec3 force(Vec3 p1, double m1, Vec3 p2, double m2) {
+Vec3 Integrator::force(Vec3 p1, double m1, Vec3 p2, double m2) {
     Vec3 dist = p2 - p1;
     double r2 = dist.length2();
     return dist.normalized() * (G * m1 * m2 / (r2 + eps2)); // F = G * m1 * m2 / r^2
 }
 
 // force acting on particle p from a node/quad
-Vec3 compute_force(Particle* p, Node* node) {
+Vec3 Integrator::compute_force(Particle* p, Node* node) {
     Vec3 f = {0, 0, 0};
     // external node, calculate force from particles (usually 1 body per leaf)
     if (node->is_leaf()) {
         for (Particle* other : node->particles) {
             if (other != p) { // avoid self-interaction
                 f += force(p->position, p->mass, other->position, other->mass);
-                // if ((p->position - other->position).length() < p->radius + other->radius) {
-                //     std::cerr << "Collision." << std::endl;
-                // }
             }
         }
     } else { // internal node
@@ -44,7 +50,7 @@ Vec3 compute_force(Particle* p, Node* node) {
 }
 
 // O(N^2) naive implementation for benchmarking
-Vec3 compute_force_naive(Particle* p, const std::vector<Particle>& particles) {
+Vec3 Integrator::compute_force_naive(Particle* p, const std::vector<Particle>& particles) {
     Vec3 f = {0, 0, 0};
     for (const Particle& other : particles) {
         if (&other != p) { // avoid self-interaction
@@ -55,7 +61,7 @@ Vec3 compute_force_naive(Particle* p, const std::vector<Particle>& particles) {
 }
 
 // build octree from particles
-Node* build_tree(std::vector<Particle>& particles) {
+Node* Integrator::build_tree(std::vector<Particle>& particles) {
     // find bounding box
     Vec3 min = particles[0].position;   
     Vec3 max = particles[0].position;
@@ -75,17 +81,13 @@ Node* build_tree(std::vector<Particle>& particles) {
     Node* root = new Node(min, max - min); // create root node
     // insert particles into octree
     for (Particle& p : particles) {  
-        // if (!root->contains(p.position)) {
-        //     std::cerr << "Particle out of bounds: " << p.position.x << ", " << p.position.y << ", " << p.position.z << std::endl;
-        //     exit(1); // exit if particle is out of bounds
-        // }
         root->insert(&p);
     }  
     return root;
 }
 
 // explicit euler time step
-void step_euler(std::vector<Particle>& particles, double dt) {
+void Integrator::step_euler(std::vector<Particle>& particles, double dt) {
     #ifndef USE_NAIVE
     Node* root = build_tree(particles); // build tree
     #endif
@@ -101,7 +103,7 @@ void step_euler(std::vector<Particle>& particles, double dt) {
     }
 }
 
-void step_leapfrog(std::vector<Particle>& particles, double dt) {
+void Integrator::step_leapfrog(std::vector<Particle>& particles, double dt) {
     #ifndef USE_NAIVE
     Node* root = build_tree(particles); // build tree
     #endif

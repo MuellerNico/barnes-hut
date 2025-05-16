@@ -1,8 +1,7 @@
 #!/bin/bash
+# this is just my lazy script to compile and run with one command
 
-echo "Compiling..."
 make clean
 make 
-echo "Running..."
 ./a.out
 echo "Done."

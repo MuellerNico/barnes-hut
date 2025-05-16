@@ -2,10 +2,9 @@
 #define TREE_H
 
 #include "particle.h"
+#include "const.h"
 #include <vector>
 #include <iostream>
-
-#define MAX_PARTICLES 8 // particles per external node
 
 struct Node {
     Vec3 position;
@@ -62,14 +61,6 @@ void Node::insert(Particle* particle) {
                 break;
             }
         }
-        // if (!inserted) {
-        //     std::cerr << "Error: Particle not inserted into any child." << std::endl;
-        //     std::cerr << "Particle position: " << particle->position.x << ", " << particle->position.y << ", " << particle->position.z << std::endl;
-        //     std::cerr << "Verlocity: " << particle->velocity.x << ", " << particle->velocity.y << ", " << particle->velocity.z << std::endl;
-        //     std::cerr << "Node position: " << position.x << ", " << position.y << ", " << position.z << std::endl;
-        //     std::cerr << "Node size: " << size.x << ", " << size.y << ", " << size.z << std::endl;
-        //     exit(1); // exit if particle is not inserted
-        // }
     }
 }
 
