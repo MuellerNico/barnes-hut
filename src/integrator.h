@@ -89,9 +89,9 @@ Node* Integrator::build_tree(std::vector<Particle>& particles) {
 // explicit euler time step
 void Integrator::step_euler(std::vector<Particle>& particles, double dt) {
     #ifndef USE_NAIVE
-    Node* root = build_tree(particles); // build tree
+    Node* root = build_tree(particles);
     #endif
-    // update particles TODO: parallel?
+    // update particles (could be parallelized)
     for (Particle& p : particles) {    
         #ifdef USE_NAIVE
         Vec3 force = compute_force_naive(&p, particles);
@@ -103,9 +103,10 @@ void Integrator::step_euler(std::vector<Particle>& particles, double dt) {
     }
 }
 
+// leapfrog time step
 void Integrator::step_leapfrog(std::vector<Particle>& particles, double dt) {
     #ifndef USE_NAIVE
-    Node* root = build_tree(particles); // build tree
+    Node* root = build_tree(particles);
     #endif
     std::vector<Vec3> accelerations(particles.size());
     // compute accelerations
