@@ -3,15 +3,12 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import pandas as pd
 
-# load data 
 data = pd.read_csv("output/frames.csv")
 tree = pd.read_csv("output/tree.csv")
 
-# TODO project on reasonable axis
-# find the min and max values for each axis
+# find bounding box
 x_min, x_max = data['pos_x'].min(), data['pos_x'].max()
 y_min, y_max = data['pos_y'].min(), data['pos_y'].max()
-
 xlim = (x_min, x_max)
 ylim = (y_min, y_max)
 

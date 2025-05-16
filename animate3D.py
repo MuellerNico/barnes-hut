@@ -5,15 +5,13 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.animation as animation
 import pandas as pd
 
-# Load data
 data = pd.read_csv("output/frames.csv")
 tree = pd.read_csv("output/tree.csv")
 
-# find the min and max values for each axis
+# find bounding box
 x_min, x_max = data['pos_x'].min(), data['pos_x'].max()
 y_min, y_max = data['pos_y'].min(), data['pos_y'].max()
 z_min, z_max = data['pos_z'].min(), data['pos_z'].max()
-
 xlim = (x_min, x_max)
 ylim = (y_min, y_max)
 zlim = (z_min, z_max)

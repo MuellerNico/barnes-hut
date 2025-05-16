@@ -9,9 +9,9 @@ To compile the C++ software use the provided makefile
 
 The default setup integrates the solar system over 25 years. 
 
-To test the benchmarking program, change the `SRC` inside the makefile from `main.cpp` to `benchmark.cpp`.  
+To test the benchmarking program, change the `SRC` inside the makefile from `main.cpp` to `benchmark.cpp`. When using data from the Gaia Archive make sure to change the gravitational constant $G$ as well to account for the different length scales (parsecs instead of AU). 
 
-To enable naive $O(N^2)$ force computation  uncomment `#define USE_NAIVE` in `const.h`. When using data from the Gaia Archive make sure to change the gravitational constant there as well to account for the different length scales (parsecs instead of AU).
+To enable naive $O(N^2)$ force computation  uncomment `#define USE_NAIVE` in `const.h`. 
 
 ## Directory Structure
 `root`: README, makefile, shell run script, python plotting scripts  
