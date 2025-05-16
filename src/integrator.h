@@ -32,7 +32,7 @@ Vec3 Integrator::compute_force(Particle* p, Node* node) {
                 f += force(p->position, p->mass, other->position, other->mass);
             }
         }
-    } else { // internal node
+    } else { // is internal node
         // check if far enough away
         double d = (node->center_of_mass - p->position).length();
         double s = node->size.x;
@@ -40,7 +40,7 @@ Vec3 Integrator::compute_force(Particle* p, Node* node) {
             // use center of mass approximation
             f += force(p->position, p->mass, node->center_of_mass, node->mass);    
         } else {
-            // recursively traverse children
+            // recursively visit children
             for (Node* child : node->children) { 
                 f += compute_force(p, child);
             }
