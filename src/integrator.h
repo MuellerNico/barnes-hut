@@ -84,7 +84,7 @@ Node* Integrator::build_tree(std::vector<Particle>& particles) {
         root->insert(&p);
     }  
     return root;
-}
+}   
 
 // explicit euler time step
 void Integrator::step_euler(std::vector<Particle>& particles, double dt) {
@@ -145,6 +145,9 @@ void Integrator::step_leapfrog(std::vector<Particle>& particles, double dt) {
     for (size_t i = 0; i < particles.size(); ++i) {
         particles[i].velocity += 0.5 * dt * accelerations[i];
     }
+    #ifndef USE_NAIVE
+    delete root;
+    #endif
 }
 
 #endif // INTEGRATOR_H

@@ -35,6 +35,8 @@ def animate(i):
     ax.set_xlabel('X Position')
     ax.set_ylabel('Y Position')
     ax.set_title(f'Frame: {i}')
+     
+    plt.savefig(f'results/frame_{i}.png')
 
 fig, ax = plt.subplots(figsize=(8, 8))
 ax.set_xlim(xlim)
