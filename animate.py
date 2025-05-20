@@ -45,4 +45,4 @@ ax.set_ylim(ylim)
 # Create GIF
 num_frames = data['frame'].nunique()
 ani = animation.FuncAnimation(fig, animate, frames=num_frames, interval=100)
-ani.save('results/simulation.gif', writer='pillow', fps=10)
+ani.save('results/simulation_2D.gif', writer='pillow', fps=10)
